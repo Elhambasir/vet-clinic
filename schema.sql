@@ -2,6 +2,7 @@
 
 CREATE DATABASE vet_clinic;
 
+-- create table animals
 CREATE TABLE animals (
     id int,
     name varchar(100),
