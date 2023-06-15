@@ -59,3 +59,44 @@ ALTER TABLE animals ADD CONSTRAINT fk_owner FOREIGN KEY(owner_id) REFERENCES own
     -- ALTER TABLE animals RENAME COLUMN escape TO escape_attempts;
     -- ALTER TABLE animals RENAME COLUMN neut TO neutered;
     -- ALTER TABLE animals RENAME COLUMN wk TO weight_kg;
+
+-- DATY 4: MANY-TO-MANY RELATIONSHIPS:
+
+-- Create a table named vets with the following columns:
+-- id: integer (set it as autoincremented PRIMARY KEY)
+-- name: string
+-- age: integer
+-- date_of_graduation: date
+
+CREATE TABLE vets (
+    id SERIAL PRIMARY KEY,
+    name varchar(100),
+    age int,
+    date_of_graduation date
+) ;
+
+-- There is a many-to-many relationship between the tables species and 
+-- vets: a vet can specialize in multiple species, and a species can have multiple vets specialized in it. 
+-- Create a "join table" called specializations to handle this relationship.
+
+CREATE TABLE specializations (
+    vet_id int,
+    species_id int,
+    CONSTRAINT fk_vet FOREIGN KEY(vet_id) REFERENCES vets(id),
+    CONSTRAINT fk_species FOREIGN KEY(species_id) REFERENCES species(id),
+    PRIMARY KEY(vet_id, species_id)
+);
+
+-- There is a many-to-many relationship between the tables animals
+--  and vets: an animal can visit multiple vets and one vet can be visited by
+--  multiple animals. Create a "join table" called visits to handle this relationship,
+-- it should also keep track of the date of the visit.
+
+CREATE TABLE visits (
+    vet_id int,
+    animal_id int,
+    date_of_visit date,
+    CONSTRAINT fk_vet FOREIGN KEY(vet_id) REFERENCES vets(id),
+    CONSTRAINT fk_animal FOREIGN KEY(animal_id) REFERENCES animals(id),
+    PRIMARY KEY(vet_id, animal_id, date_of_visit)
+);
