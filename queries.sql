@@ -154,7 +154,6 @@ number_of_animals DESC LIMIT 1;
 
 -- DAY 4 : ADVANCED QUERIES --
 
-
 -- Write queries to answer the following:
 -- Who was the last animal seen by William Tatcher?
     SELECT animals.name,visits.date_of_visit FROM
@@ -220,25 +219,20 @@ number_of_animals DESC LIMIT 1;
     visits.date_of_visit DESC LIMIT 1;
 
 -- How many visits were with a vet that did not specialize in that animal's species?
-    SELECT COUNT(visits.date_of_visit) FROM 
-    visits JOIN 
-    vets ON 
-    visits.vet_id = vets.id WHERE 
-    vets.id NOT IN (SELECT specializations.vet_id FROM specializations);
 
+    SELECT COUNT(*)
+    FROM visits
+    JOIN animals ON animals.id = visits.animal_id
+    JOIN vets ON vets.id = visits.vet_id
+    LEFT JOIN specializations AS spec ON spec.vet_id = vets.id AND spec.species_id = animals.species_id
+    WHERE spec.vet_id IS NULL;
+    
 -- What specialty should Maisy Smith consider getting? Look for the species she gets the most.
-    SELECT COUNT(visits.date_of_visit) as
-     c, (SELECT 
-     name FROM 
-     species WHERE 
-     id = (SELECT 
-     species_id FROM 
-     animals WHERE 
-     id = animal_id)) FROM 
-     visits WHERE 
-     vet_id = (select 
+    SELECT COUNT(visits.animal_id) FROM 
+     visits where vet_id = (select 
      id from 
      vets WHERE 
-     name = 'Maisy Smith') GROUP BY 
-     animal_id ORDER BY 
-     c DESC LIMIT 1 ; 
+     name = 'Maisy Smith') AND 
+     animal_id IN (SELECT id from animals WHERE species_id = (SELECT id FROM species WHERE name = 'Digimon'));
+
+
