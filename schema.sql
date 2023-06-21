@@ -1,7 +1,19 @@
 /* Database schema to keep the structure of entire database. */
 
 CREATE DATABASE vet_clinic;
-
+-- new --
+CREATE DATABASE vetClinic;
+CREATE TABLE owners(
+  id INT GENERATED ALWAYS AS IDENTITY,
+  full_name VARCHAR(20),
+  age INT,
+  PRIMARY KEY(id)
+);
+CREATE TABLE species(
+  id INT GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR(20),
+  PRIMARY KEY(id)
+);
 -- create table animals
 CREATE TABLE animals (
     id int,
